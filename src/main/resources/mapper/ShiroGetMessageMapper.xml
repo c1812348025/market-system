@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.marketsystem.mapper.ShiroGetMessageMapper">
+
+
+    <select id="findbyName" resultType="com.example.marketsystem.model.entity.Alluser">
+        select
+               user_id as Id,
+               user_name,
+               user_pwd,
+               uesr_handline,
+               uesr_money,
+               user_salt,
+               user_phone
+        from all_user
+        where
+             user_name=#{username}
+    </select>
+    <select id="findRoleByUserId" resultType="com.example.marketsystem.model.entity.AllRole">
+        select
+            a.role_id as Id,
+            a.role_name,
+            a.role_tage
+        from all_role a ,user_role_message b
+        where a.role_tage=b.role_tage
+          and b.user_id=#{userid}
+    </select>
+    <select id="findPermissionByUserId" resultType="com.example.marketsystem.model.entity.AllPermission">
+        select * from (SELECT
+            e.per_id as Id,
+            e.per_name,
+            e.per_tag,
+            e.per_url,
+            e.per_rank,
+            e.per_superior
+        FROM all_user AS a
+LEFT JOIN user_role_message as b on a.user_id=b.user_id
+            LEFT JOIN all_role as c on b.role_tage=c.role_tage
+            LEFT JOIN role_per_message as d on d.role_tage=c.role_tage
+            LEFT JOIN all_permissions as e on e.per_tag=d.per_tage
+                       where a.user_id=#{userid}) b
+        UNION
+        select * from
+            (SELECT
+            h.per_id as Id,
+            h.per_name,
+            h.per_tag,
+            h.per_url,
+            h.per_rank,
+            h.per_superior
+        from all_user as a
+           LEFT JOIN user_per_message as b on a.user_id=b.user_id
+           LEFT JOIN all_permissions as h on h.per_tag=b.per_tage
+             where a.user_id=#{userid}) a
+    </select>
+
+</mapper>

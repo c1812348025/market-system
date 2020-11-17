@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.marketsystem.mapper.PubAccessAreaMapper">
+
+    <select id="getSlideShow" resultType="com.example.marketsystem.model.entity.SlideShow">
+        select
+             film_id
+            ,film_name
+            ,film_url
+        from slide_show
+    </select>
+    <select id="getCinEnaList" resultType="com.example.marketsystem.model.entity.CinemaDetail">
+        SELECT
+               cinema_id
+             ,cinema_name
+             ,cinema_introduce
+             ,cinema_picture
+        from cinema_show
+    </select>
+    <select id="getfilmList" resultType="com.example.marketsystem.model.entity.FilmShowList">
+        SELECT
+               film_id
+             ,film_name
+             ,film_picture
+        from filem_list_show
+    </select>
+    <select id="getFilmDetailpresell" resultType="com.example.marketsystem.model.entity.RequestFilmList">
+        select
+               film_id
+             ,film_name
+             ,film_picture
+             ,film_beon_time
+        from film_detail
+        <where>
+            and 1=1
+            and film_status='2'
+        </where>
+    </select>
+</mapper>

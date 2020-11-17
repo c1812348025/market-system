@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.marketsystem.mapper.TuserMapper">
+    <!--注册接口-->
+    <insert id="InserTuser">
+        INSERT into all_user(user_name,user_pwd,user_phone)
+        VALUES(#{name,jdbcType=VARCHAR},#{pwd,jdbcType=VARCHAR},#{phone,jdbcType=VARCHAR})
+    </insert>
+    <!--登录  注册前判断一些属性-->
+    <select id="phonelogin" resultType="com.example.marketsystem.model.entity.Alluser">
+         select
+         t_id,
+         t_name,
+         t_pwd,
+         t_phone,
+         t_money,
+         t_role from tuser
+        <where>
+            and 1=1
+            <if test="pwd != null and pwd != ''">
+                and t_pwd = #{pwd,jdbcType = VARCHAR}
+            </if>
+            <if test="phone != null and phone != ''">
+                and t_phone = #{phone,jdbcType=VARCHAR}
+            </if>
+        </where>
+    </select>
+    <select id="userLogin" resultType="com.example.marketsystem.model.entity.Alluser">
+        select
+        t_id,
+        t_name,
+        t_pwd,
+        t_phone,
+        t_money,
+        t_role from tuser
+        <where>
+            and 1=1
+            <if test="pwd != null and pwd != ''">
+                and t_pwd = #{pwd,jdbcType = VARCHAR}
+            </if>
+            <if test="name != null and name != ''">
+                and t_name = #{name,jdbcType=VARCHAR}
+            </if>
+        </where>
+    </select>
+    <select id="verificationTuser" resultType="java.lang.Integer">
+        select COUNT(*)
+        from all_user
+        <where>
+            <if test="name != null and name != ''">
+                and user_name = #{name,jdbcType=VARCHAR}
+            </if>
+            <if test="phone != null and phone != ''">
+                and user_phone = #{phone,jdbcType=VARCHAR}
+            </if>
+        </where>
+    </select>
+</mapper>
